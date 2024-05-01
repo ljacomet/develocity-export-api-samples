@@ -3,5 +3,8 @@
 ###
 https://ge.gradle.org/build-export/v2/build/{{id}}/events?eventTypes=TaskStarted,TaskFinished
 Authorization: Bearer {{api_key}}
+###
+https://ge.gradle.org/build-export/v2/builds/since/1714565287000
+Authorization: Bearer {{api_key}}
 
 ###
