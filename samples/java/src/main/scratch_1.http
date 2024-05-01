@@ -1,0 +1,7 @@
+@id = eczxpkeookk4o
+
+###
+https://ge.gradle.org/build-export/v2/build/{{id}}/events?eventTypes=TaskStarted,TaskFinished
+Authorization: Bearer {{api_key}}
+
+###

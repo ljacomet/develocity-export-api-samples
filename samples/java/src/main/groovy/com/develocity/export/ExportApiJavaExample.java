@@ -32,17 +32,16 @@ import static java.time.Instant.now;
 
 public final class ExportApiJavaExample {
 
-    private static final HttpUrl DEVELOCITY_SERVER_URL = HttpUrl.parse("https://develocity.example.com");
+    private static final HttpUrl DEVELOCITY_SERVER_URL = HttpUrl.parse("https://ge.gradle.org");
     private static final String EXPORT_API_USERNAME = System.getenv("EXPORT_API_USER");
     private static final String EXPORT_API_PASSWORD = System.getenv("EXPORT_API_PASSWORD");
     private static final String EXPORT_API_ACCESS_KEY = System.getenv("EXPORT_API_ACCESS_KEY");
-    private static final int MAX_BUILD_SCANS_STREAMED_CONCURRENTLY = 30;
+    private static final int MAX_BUILD_SCANS_STREAMED_CONCURRENTLY = 1;
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private enum BuildTool {
-        GRADLE("BuildAgent", json -> json.get("data").get("username").asText()),
-        MAVEN("MvnBuildAgent", json -> json.get("data").get("username").asText())
+        GRADLE("BuildAgent,TaskStarted,TaskFinished", json -> json.get("data").get("username").asText()),
         ;
 
         private final String buildAgentEvent;
@@ -63,7 +62,7 @@ public final class ExportApiJavaExample {
     }
 
     public static void main(String[] args) throws Exception {
-        Instant since1Day = now().minus(Duration.ofHours(24));
+        Instant since1Day = now().minus(Duration.ofHours(2));
 
         OkHttpClient httpClient = new OkHttpClient.Builder()
                 .connectTimeout(Duration.ZERO)
@@ -136,9 +135,10 @@ public final class ExportApiJavaExample {
 
                 Request request = requestBuildEvents(buildTool, buildId);
 
-                ExtractUsernameFromBuildEvents listener = new ExtractUsernameFromBuildEvents(buildTool, buildId);
+//                ExtractUsernameFromBuildEvents listener = new ExtractUsernameFromBuildEvents(buildTool, buildId);
+                TasksDurationsSourceListener listener = new TasksDurationsSourceListener();
                 eventSourceFactory.newEventSource(request, listener);
-                candidateUsernames.add(listener.getUsername());
+//                candidateUsernames.add(listener.getUsername());
             }
         }
 
@@ -192,7 +192,7 @@ public final class ExportApiJavaExample {
         }
     }
 
-    private static class PrintFailuresEventSourceListener extends EventSourceListener {
+    public static class PrintFailuresEventSourceListener extends EventSourceListener {
         @Override
         public void onFailure(@NotNull EventSource eventSource, @Nullable Throwable t, @Nullable Response response) {
             if (t != null) {

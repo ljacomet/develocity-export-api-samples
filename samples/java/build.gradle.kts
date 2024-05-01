@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("groovy")
     id("application")
 }
 
@@ -14,6 +15,8 @@ dependencies {
     implementation(platform("com.fasterxml.jackson:jackson-bom:2.17.0"))
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")
     implementation("com.google.guava:guava:33.1.0-jre")
+    implementation("org.apache.groovy:groovy:4.0.21")
+    implementation("org.apache.groovy:groovy-json:4.0.21")
 }
 
 java {
