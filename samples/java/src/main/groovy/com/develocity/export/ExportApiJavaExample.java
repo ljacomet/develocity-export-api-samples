@@ -64,7 +64,7 @@ public final class ExportApiJavaExample {
     }
 
     public static void main(String[] args) throws Exception {
-        Instant since1Day = now().minus(Duration.ofHours(12));
+        Instant since1Day = now().minus(Duration.ofHours(1));
 
         OkHttpClient httpClient = new OkHttpClient.Builder()
                 .connectTimeout(Duration.ZERO)
